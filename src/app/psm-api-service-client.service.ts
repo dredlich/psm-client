@@ -9,7 +9,7 @@ import { Items } from './shared/items';
 })
 export class PsmApiServiceClientService {
 
-  BASE_URL = 'https://psm.tech4germany.org:8443/ords/psm/api-v1/';
+  BASE_URL = 'https://psm-api.bvl.bund.de/ords/psm/api-v1/';
   DEFAULT_PAGE_SIZE = '&limit=200000';
 
   constructor(private http: HttpClient) { }
