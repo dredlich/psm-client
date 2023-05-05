@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import * as moment from 'moment';
 import {Mittel} from '../shared/mittel';
 import {ActivatedRoute} from '@angular/router';
@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private psmServiceClient: PsmApiServiceClientService) { }
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
-  startDate = new FormControl(moment([2017, 0, 1]));
+  startDate = new UntypedFormControl(moment([2017, 0, 1]));
   mittelListe: any = [];
   topTenMittelGefahren: Array<Mittel> = [];
   topTenMittelAuflagen: Array<Mittel> = [];
