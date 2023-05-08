@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Items } from './shared/items';
+import { Items } from '../model/items';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PsmApiServiceClientService {
+export class PsmApiServiceClient {
 
   BASE_URL = 'https://psm-api.bvl.bund.de/ords/psm/api-v1/';
-  DEFAULT_PAGE_SIZE = '&limit=200000';
+  DEFAULT_PAGE_SIZE = '200000';
 
   constructor(private http: HttpClient) { }
 
@@ -20,10 +20,22 @@ export class PsmApiServiceClientService {
     })
   };
 
-  getMittel(startDate): Observable<Items> {
+  getCodeViaCodeListId(codeListId: number): Observable<any> {
+    return this.http.get<Items>(this.BASE_URL + '/kode/?' + 'kodeliste=' + codeListId + '&sprache=DE&limit=100')
+      .pipe(catchError(this.handleError));
+  }
+
+  getProductViaPage(pageNumber: number, pageSize: number): Observable<any> {
+    // const date =  startDate.value.format('YYYY-MM-DD[T]HH:mm:ss[Z]');
+    // const query = '{"ZUL_ERSTMALIG_AM":{"$gt":{"$date": ' + '\"' + date + '\" }}}';
+    const offset = pageNumber * pageSize;
+    return this.http.get<Items>(this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize)
+      .pipe(catchError(this.handleError));
+  }
+  getProduct(startDate): Observable<Items> {
     const date =  startDate.value.format('YYYY-MM-DD[T]HH:mm:ss[Z]');
     const query = '{"ZUL_ERSTMALIG_AM":{"$gt":{"$date": ' + '\"' + date + '\" }}}';
-    return this.http.get<Items>(this.BASE_URL + '/mittel/?q=' + encodeURIComponent(query) + this.DEFAULT_PAGE_SIZE)
+    return this.http.get<Items>(this.BASE_URL + '/mittel/?q=' + encodeURIComponent(query) + '&limit=' + this.DEFAULT_PAGE_SIZE)
       .pipe(catchError(this.handleError));
   }
 
@@ -34,25 +46,32 @@ export class PsmApiServiceClientService {
       temp += '{"$eq":' + '\"' + kennr + '\"' + '},';
     }
     // remove last comma
-    temp = temp.substr(0, temp.length - 1);
+    temp = temp.substring(0, temp.length - 1);
     const query = '{"KENNR":{"$or":[ '  + temp +  ']}}}';
 
-    return this.http.get<Items>(this.BASE_URL + '/mittel/?q=' + encodeURIComponent(query) + this.DEFAULT_PAGE_SIZE)
+    return this.http.get<Items>(this.BASE_URL + '/mittel/?q=' + encodeURIComponent(query) + '&limit=' + this.DEFAULT_PAGE_SIZE)
       .pipe(catchError(this.handleError));
   }
 
   getTopTenAuflagen(): Observable<Items> {
     const topTenQuery = '{"$orderby":"EBENE"}';
     return this.http.get<Items>(
-      this.BASE_URL + '/auflagen/?q=' + encodeURIComponent(topTenQuery) + this.DEFAULT_PAGE_SIZE
+      this.BASE_URL + '/auflagen/?q=' + encodeURIComponent(topTenQuery) + '&limit=' + this.DEFAULT_PAGE_SIZE
       ).pipe(catchError(this.handleError));
   }
 
   getTopTenHinweise(): Observable<Items> {
     const topTenQuery = '{"$orderby":"KENNR"}';
-    return this.http.get<Items>(this.BASE_URL + '/ghs_gefahrenhinweise/?q=' + encodeURIComponent(topTenQuery) + this.DEFAULT_PAGE_SIZE)
+    return this.http.get<Items>(
+      this.BASE_URL + '/ghs_gefahrenhinweise/?q=' + encodeURIComponent(topTenQuery) + '&limit=' + this.DEFAULT_PAGE_SIZE)
       .pipe(catchError(this.handleError)
-      );
+    );
+  }
+
+  getUseListViaPage(pageNumber: number, pageSize: number): Observable<any> {
+    const offset = pageNumber * pageSize;
+    return this.http.get<Items>(this.BASE_URL + '/awg/?' + 'offset=' + offset + '&limit=' + pageSize)
+      .pipe(catchError(this.handleError));
   }
 
   // Error handling
@@ -70,7 +89,4 @@ export class PsmApiServiceClientService {
     window.alert(errorMessage);
     return throwError(errorMessage);
   }
-
-
-
 }

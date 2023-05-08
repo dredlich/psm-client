@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { PsmApiServiceClientService } from './psm-api-service-client.service';
+import { PsmApiServiceClient } from './service/psm.api.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
@@ -12,13 +12,23 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
 
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AppRoutingModule } from './app-routing/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { ProductDataTableComponent } from './pages/products/product-data-table.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { UsesDataTableComponent } from './pages/uses/uses-data-table.component';
+import {MatToolbarModule} from '@angular/material/toolbar';
+
+
 
 const MY_FORMATS = {
   parse: {
@@ -36,29 +46,36 @@ const MY_FORMATS = {
   declarations: [
     AppComponent,
     HomeComponent,
+    ProductDataTableComponent,
+    UsesDataTableComponent,
   ],
   imports: [
+    AppRoutingModule,
+    BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule,
-
-    MatIconModule,
-    MatCardModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
+    MatCardModule,
     MatDatepickerModule,
+    MatIconModule,
     MatInputModule,
-    MatNativeDateModule,
+    MatListModule,
     MatMomentDateModule,
-    AppRoutingModule,
-    RouterTestingModule
+    MatNativeDateModule,
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
+    RouterTestingModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatToolbarModule,
   ],
   providers: [
-    PsmApiServiceClientService,
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+    PsmApiServiceClient,
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
   bootstrap: [AppComponent]
 })

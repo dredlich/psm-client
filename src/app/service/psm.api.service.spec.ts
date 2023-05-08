@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { PsmApiServiceClientService } from './psm-api-service-client.service';
-import {HttpClientModule} from '@angular/common/http';
+import { PsmApiServiceClient } from './psm.api.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('PsmApiServiceClientService', () => {
-  let service: PsmApiServiceClientService;
+  let service: PsmApiServiceClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -11,7 +11,7 @@ describe('PsmApiServiceClientService', () => {
         HttpClientModule
     ]
     });
-    service = TestBed.inject(PsmApiServiceClientService);
+    service = TestBed.inject(PsmApiServiceClient);
   });
 
   it('should be created', () => {

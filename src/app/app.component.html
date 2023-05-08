@@ -1,10 +1,28 @@
-<!-- Toolbar -->
-<!--<div class="toolbar" role="banner">-->
-<!--  <div class="spacer"></div>-->
-<!--  <a routerlink="/about" routerLinkActive="active" aria-label="Wut is dit" title="About" style="position:relative;right:32px;color:#fff">About</a>-->
-
-<!--</div>-->
-
+<mat-toolbar class="mat-primary page-toolbar">
+  <section class="toolbar-button-container-left" style="margin: 0 auto;">
+    <button class="toolbar-button"
+            mat-button
+            routerLink="/home"
+            routerLinkActive="active-link">
+      <mat-icon>dashboard</mat-icon>
+      <span>Dashboard</span>
+    </button>
+    <button class="toolbar-button"
+            mat-button
+            routerLink="/products"
+            routerLinkActive="active-link">
+      <mat-icon>science</mat-icon>
+      <span>Products</span>
+    </button>
+    <button class="toolbar-button"
+            mat-button
+            routerLink="/uses"
+            routerLinkActive="active-link">
+      <mat-icon>back_hand</mat-icon>
+      <span>Uses</span>
+    </button>
+  </section>
+</mat-toolbar>
 <div class="content" role="main">
   <router-outlet></router-outlet>
 </div>

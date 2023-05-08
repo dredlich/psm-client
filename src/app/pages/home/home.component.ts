@@ -1,11 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {UntypedFormControl} from '@angular/forms';
 import * as moment from 'moment';
-import {Mittel} from '../shared/mittel';
-import {ActivatedRoute} from '@angular/router';
-import {PsmApiServiceClientService} from '../psm-api-service-client.service';
-import {Items} from '../shared/items';
-import {MatDatepicker, MatDatepickerInputEvent} from '@angular/material/datepicker';
+import { Product } from '../../model/product';
+import { ActivatedRoute } from '@angular/router';
+import { PsmApiServiceClient } from '../../service/psm.api.service';
+import { Items } from '../../model/items';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MatTable } from '@angular/material/table';
 
 @Component({
   selector: 'app-home',
@@ -13,17 +14,23 @@ import {MatDatepicker, MatDatepickerInputEvent} from '@angular/material/datepick
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  constructor(
+    private route: ActivatedRoute,
+    private psmServiceClient: PsmApiServiceClient
+  ) { }
 
-  constructor(private route: ActivatedRoute, private psmServiceClient: PsmApiServiceClientService) { }
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
+  @ViewChild(MatTable) productTable: MatTable<Product>;
   startDate = new UntypedFormControl(moment([2017, 0, 1]));
-  mittelListe: any = [];
-  topTenMittelGefahren: Array<Mittel> = [];
-  topTenMittelAuflagen: Array<Mittel> = [];
+  mittelListe: Array<Product> = [];
+  topTenMittelGefahren: Array<Product> = [];
+  topTenMittelAuflagen: Array<Product> = [];
 
   ngOnInit(): void {
-    this.psmServiceClient.getMittel(this.startDate).subscribe((data: {}) => {
-      this.mittelListe = data;
+    this.psmServiceClient.getProduct(this.startDate).subscribe((data: Items) => {
+      if (null != data && null != data.items && 0 < data.items.length) {
+        this.mittelListe = data.items;
+      }
     });
     this.psmServiceClient.getTopTenHinweise().subscribe((data: Items) => {
 
@@ -82,9 +89,9 @@ export class HomeComponent implements OnInit {
     });
   }
   // tslint:disable-next-line:typedef
-  handleDateChange($event: MatDatepickerInputEvent<unknown, unknown>) {
-    return this.psmServiceClient.getMittel(this.startDate).subscribe((data: {}) => {
-      this.mittelListe = data;
+  handleDateChange() {
+    return this.psmServiceClient.getProduct(this.startDate).subscribe((data: Items) => {
+      this.mittelListe = data.items;
     });
   }
 

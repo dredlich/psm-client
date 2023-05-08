@@ -1,7 +1,7 @@
 <div>
 
   <div id="head" class="card highlight-card card-small">
-    <svg id="rocket" alt="Rocket Ship" xmlns="http://www.w3.org/2000/svg" width="101.678" height="101.678" viewBox="0 0 101.678 101.678">
+    <svg id="rocket" xmlns="http://www.w3.org/2000/svg" width="101.678" height="101.678" viewBox="0 0 101.678 101.678">
       <g id="Group_83" data-name="Group 83" transform="translate(-141 -696)">
         <circle id="Ellipse_8" data-name="Ellipse 8" cx="50.839" cy="50.839" r="50.839" transform="translate(141 696)" fill="#dd0031"/>
         <g id="Group_47" data-name="Group 47" transform="translate(165.185 720.185)">
@@ -11,14 +11,13 @@
       </g>
     </svg>
     <span>PSM API Dashboard</span>
-    <svg id="rocket-smoke" alt="Rocket Ship Smoke" xmlns="http://www.w3.org/2000/svg" width="516.119" height="1083.632" viewBox="0 0 516.119 1083.632">
+    <svg id="rocket-smoke" xmlns="http://www.w3.org/2000/svg" width="516.119" height="1083.632" viewBox="0 0 516.119 1083.632">
       <path id="Path_40"
             data-name="Path 40"
             d="M644.6,141S143.02,215.537,147.049,870.207s342.774,201.755,342.774,201.755S404.659,847.213,388.815,762.2c-27.116-145.51-11.551-384.124,271.9-609.1C671.15,139.365,644.6,141,644.6,141Z"
             transform="translate(-147.025 -140.939)" fill="#f5f5f5"/>
     </svg>
   </div>
-
   <div class="card-container">
 
     <div class="card" style="display: block">
@@ -28,11 +27,11 @@
       <div style="text-align: center">
         <mat-form-field appearance="fill">
           <mat-label></mat-label>
-          <input matInput [matDatepicker]="picker" [formControl]="startDate" (dateChange)="handleDateChange($event)">
+          <input matInput [matDatepicker]="picker" [formControl]="startDate" (dateChange)="handleDateChange()">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <p *ngIf="mittelListe && mittelListe.items" style="margin:72px 0 36px 0; font-weight:900;font-size:27px">{{mittelListe.items.length}}</p>
+        <p *ngIf="mittelListe" style="margin:72px 0 36px 0; font-weight:900;font-size:27px">{{mittelListe.length}}</p>
       </div>
     </div>
 
@@ -42,8 +41,8 @@
       </h3>
       <div *ngIf="topTenMittelGefahren">
         <mat-list>
-          <mat-list-item *ngFor="let mittelGef of topTenMittelGefahren" >
-            <div><span>{{mittelGef.mittelname}}</span></div>
+          <mat-list-item *ngFor="let mittelGef of topTenMittelGefahren">
+            <div><span>{{mittelGef.name}}</span></div>
           </mat-list-item>
         </mat-list>
       </div>
@@ -56,7 +55,7 @@
       <div *ngIf="topTenMittelAuflagen">
         <mat-list>
           <mat-list-item *ngFor="let mittelAuf of topTenMittelAuflagen" >
-            <div><span>{{mittelAuf.mittelname}}</span></div>
+            <div><span>{{mittelAuf.name}}</span></div>
           </mat-list-item>
         </mat-list>
       </div>
