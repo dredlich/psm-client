@@ -1,3 +1,5 @@
+import {Column} from './table/column';
+
 export interface IUse {
   identifier: string;
   productNr: string;
@@ -8,17 +10,21 @@ export interface IUse {
   anwendungstechnik: string;
   wirkungsbereich: string;
 }
-export class Use implements IUse {
+export class Use implements IUse
+{
+  @Column()
   identifier: string;
   productNr: string;
   authorizationRequestNr: string;
   useNr: string;
+  @Column()
   einsatzgebiet: string;
+  @Column()
   anwendungsbereich: string;
+  @Column()
   anwendungstechnik: string;
+  @Column()
   wirkungsbereich: string;
-  // kultur_erl: string;
-  // schadorg_erl: string;
 
   constructor(
     awgId,

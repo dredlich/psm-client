@@ -1,4 +1,4 @@
-import {Product} from './product';
+import { Product } from './product';
 
 describe('Mittel', () => {
   it('should create an instance', () => {

@@ -1,12 +1,13 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {UntypedFormControl} from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import * as moment from 'moment';
-import { Product } from '../../model/product';
+import { Product, Items } from '../../model';
 import { ActivatedRoute } from '@angular/router';
 import { PsmApiServiceClient } from '../../service/psm.api.service';
-import { Items } from '../../model/items';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatTable } from '@angular/material/table';
+import { ConverterService } from '../../service/converter.service';
+import { Code } from '../../model/code';
 
 @Component({
   selector: 'app-home',
@@ -14,10 +15,18 @@ import { MatTable } from '@angular/material/table';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  codeList: Array<Code>;
+  isLoading = false;
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private converter: ConverterService,
     private psmServiceClient: PsmApiServiceClient
-  ) { }
+  ) {
+    this.activatedRoute.data.subscribe(
+      ({ response }) => {
+        this.codeList = this.converter.convertToCodeArray(response.items);
+      });
+  }
 
   @ViewChild(MatDatepicker) datepicker: MatDatepicker<Date>;
   @ViewChild(MatTable) productTable: MatTable<Product>;
@@ -27,6 +36,7 @@ export class HomeComponent implements OnInit {
   topTenMittelAuflagen: Array<Product> = [];
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.psmServiceClient.getProduct(this.startDate).subscribe((data: Items) => {
       if (null != data && null != data.items && 0 < data.items.length) {
         this.mittelListe = data.items;
@@ -57,7 +67,7 @@ export class HomeComponent implements OnInit {
 
       // tslint:disable-next-line:no-shadowed-variable
       this.psmServiceClient.getMittelByKennrList(kennrList).subscribe((data: Items) => {
-        this.topTenMittelGefahren = data.items;
+        this.topTenMittelGefahren = this.converter.convertToProductArray(data.items, this.codeList);
       });
     });
     this.psmServiceClient.getTopTenAuflagen().subscribe((data: Items) => {
@@ -84,9 +94,11 @@ export class HomeComponent implements OnInit {
       }
       // tslint:disable-next-line:no-shadowed-variable
       this.psmServiceClient.getMittelByKennrList(kennrList).subscribe((data: Items) => {
-        this.topTenMittelAuflagen = data.items;
+        this.topTenMittelAuflagen = this.converter.convertToProductArray(data.items, this.codeList);
+        this.isLoading = false;
       });
     });
+
   }
   // tslint:disable-next-line:typedef
   handleDateChange() {

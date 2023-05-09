@@ -26,7 +26,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { UsesDataTableComponent } from './pages/uses/uses-data-table.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { TableComponent } from './components/table/table.component';
+import { ConverterService } from './service/converter.service';
+import { CardComponent } from './components/card/card.component';
 
 
 
@@ -48,6 +51,8 @@ const MY_FORMATS = {
     HomeComponent,
     ProductDataTableComponent,
     UsesDataTableComponent,
+    TableComponent,
+    CardComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -73,6 +78,7 @@ const MY_FORMATS = {
     MatToolbarModule,
   ],
   providers: [
+    ConverterService,
     PsmApiServiceClient,
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },

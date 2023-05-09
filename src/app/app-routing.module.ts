@@ -3,12 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { ProductDataTableComponent } from './pages/products/product-data-table.component';
 import { UsesDataTableComponent } from './pages/uses/uses-data-table.component';
+import { codeResolver } from './initialize.resolver';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'products', component: ProductDataTableComponent },
+  { path: 'home', component: HomeComponent, resolve: { response: codeResolver } },
+  { path: 'products', component: ProductDataTableComponent, resolve: { response: codeResolver } },
   { path: 'uses', component: UsesDataTableComponent },
-  { path: '',   redirectTo: '/uses', pathMatch: 'full' },
+  { path: '',   redirectTo: '/products', pathMatch: 'full' },
 ];
 
 @NgModule({

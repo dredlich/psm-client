@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Items } from '../model/items';
+import { Items } from '../model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,12 @@ export class PsmApiServiceClient {
     const offset = pageNumber * pageSize;
     return this.http.get<Items>(this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize)
       .pipe(catchError(this.handleError));
+  }
+
+  getProductArray(pageNumber, pageSize): Observable<any> {
+    const offset = pageNumber * pageSize;
+    return this.http.get<Items>(this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize);
+
   }
   getProduct(startDate): Observable<Items> {
     const date =  startDate.value.format('YYYY-MM-DD[T]HH:mm:ss[Z]');
@@ -68,6 +74,10 @@ export class PsmApiServiceClient {
     );
   }
 
+  getUseArray(pageIndex: number, pageSize: number): Observable<any> {
+    const offset = pageIndex * pageSize;
+    return this.http.get<Items>(this.BASE_URL + '/awg/?' + 'offset=' + offset + '&limit=' + pageSize);
+  }
   getUseListViaPage(pageNumber: number, pageSize: number): Observable<any> {
     const offset = pageNumber * pageSize;
     return this.http.get<Items>(this.BASE_URL + '/awg/?' + 'offset=' + offset + '&limit=' + pageSize)
@@ -89,4 +99,6 @@ export class PsmApiServiceClient {
     window.alert(errorMessage);
     return throwError(errorMessage);
   }
+
+
 }

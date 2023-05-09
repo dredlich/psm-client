@@ -13,9 +13,7 @@ export class AppComponent implements OnInit {
 
   // private name: '';
   title = 'psm-client';
-
-  // tslint:disable-next-line:typedef
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.titleService.setTitle(this.title);
     // this.route.queryParams.subscribe(params => {
     //   this.name = params.name;

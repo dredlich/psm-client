@@ -13,3 +13,32 @@
   font-weight: bold;
   color: #666;
 }
+.loading-indicator
+{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+  background: rgba(0,0,0,0.3);
+}
+.loading-indicator mat-spinner
+{
+  position: relative;
+  top: calc(50% - 100px);
+  margin: 0 auto;
+}
+.table-container
+{
+  min-width: 96vw;
+  min-height: 56vh;
+}
+.page-control-container
+{
+  display:flex;
+  align-items: baseline;
+}
+.page-ctrl
+{
+  width: 6.8rem;
+  margin: 2rem 1rem 0 0;
+}
