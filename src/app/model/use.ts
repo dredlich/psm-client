@@ -5,10 +5,12 @@ export interface IUse {
   productNr: string;
   authorizationRequestNr: string;
   useNr: string;
-  einsatzgebiet: string;
-  anwendungsbereich: string;
-  anwendungstechnik: string;
-  wirkungsbereich: string;
+  authorizationState: string;
+  authorizationEnd: string;
+  fieldOfUse: string;
+  applicationArea: string;
+  areaOfUse: string;
+  applicationTechnique: string;
 }
 export class Use implements IUse
 {
@@ -17,32 +19,37 @@ export class Use implements IUse
   productNr: string;
   authorizationRequestNr: string;
   useNr: string;
+  authorizationState: string;
   @Column()
-  einsatzgebiet: string;
+  authorizationEnd: string;
   @Column()
-  anwendungsbereich: string;
+  fieldOfUse: string;
   @Column()
-  anwendungstechnik: string;
+  applicationArea: string;
   @Column()
-  wirkungsbereich: string;
+  areaOfUse: string;
+  @Column()
+  applicationTechnique: string;
+
 
   constructor(
     awgId,
     kennr,
     antragnr,
     awgnr,
+    wirkungsbereich,
     einsatzgebiet,
     anwendungsbereich,
-    anwendungstechnik,
-    wirkungsbereich
+    anwendungstechnik
   ) {
     this.identifier = awgId;
     this.productNr = kennr;
     this.authorizationRequestNr = antragnr;
     this.useNr = awgnr;
-    this.einsatzgebiet = einsatzgebiet;
-    this.anwendungsbereich = anwendungsbereich;
-    this.anwendungstechnik = anwendungstechnik;
-    this.wirkungsbereich = wirkungsbereich;
+    this.fieldOfUse = wirkungsbereich;
+    this.applicationArea = einsatzgebiet;
+    this.areaOfUse = anwendungsbereich;
+    this.applicationTechnique = anwendungstechnik;
+
   }
 }

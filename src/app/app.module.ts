@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 
@@ -30,8 +30,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { TableComponent } from './components/table/table.component';
 import { ConverterService } from './service/converter.service';
 import { CardComponent } from './components/card/card.component';
-
-
+import { InitContextService } from './service/init.context.service';
 
 const MY_FORMATS = {
   parse: {
@@ -44,6 +43,14 @@ const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
+function initializeAppFactory(appContext: InitContextService): () => Promise<any> {
+  return () => {
+    const promises: Array<Promise<any>> = [];
+    promises.push(appContext.initCodeDictionary());
+    return Promise.all(promises);
+  };
+}
 
 @NgModule({
   declarations: [
@@ -80,6 +87,7 @@ const MY_FORMATS = {
   providers: [
     ConverterService,
     PsmApiServiceClient,
+    { provide: APP_INITIALIZER, multi: true, useFactory: initializeAppFactory, deps: [InitContextService] },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],

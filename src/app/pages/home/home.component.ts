@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.psmServiceClient.getProduct(this.startDate).subscribe((data: Items) => {
+    this.psmServiceClient.getProductArrayViaAuthorizationStart(this.startDate).subscribe((data: Items) => {
       if (null != data && null != data.items && 0 < data.items.length) {
         this.mittelListe = data.items;
       }
@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit {
 
       // tslint:disable-next-line:no-shadowed-variable
       this.psmServiceClient.getMittelByKennrList(kennrList).subscribe((data: Items) => {
-        this.topTenMittelGefahren = this.converter.convertToProductArray(data.items, this.codeList);
+        this.topTenMittelGefahren = this.converter.convertToProductArray(data.items);
       });
     });
     this.psmServiceClient.getTopTenAuflagen().subscribe((data: Items) => {
@@ -94,7 +94,7 @@ export class HomeComponent implements OnInit {
       }
       // tslint:disable-next-line:no-shadowed-variable
       this.psmServiceClient.getMittelByKennrList(kennrList).subscribe((data: Items) => {
-        this.topTenMittelAuflagen = this.converter.convertToProductArray(data.items, this.codeList);
+        this.topTenMittelAuflagen = this.converter.convertToProductArray(data.items);
         this.isLoading = false;
       });
     });
@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
   }
   // tslint:disable-next-line:typedef
   handleDateChange() {
-    return this.psmServiceClient.getProduct(this.startDate).subscribe((data: Items) => {
+    return this.psmServiceClient.getProductArrayViaAuthorizationStart(this.startDate).subscribe((data: Items) => {
       this.mittelListe = data.items;
     });
   }

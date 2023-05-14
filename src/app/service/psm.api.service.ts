@@ -20,29 +20,64 @@ export class PsmApiServiceClient {
     })
   };
 
-  getCodeViaCodeListId(codeListId: number): Observable<any> {
+  getCodeListViaListIdList(idList: number[]): Observable<any> {
+    let filterIN = '';
+    const lastIndex = idList.length - 1;
+    idList.forEach((id: number, index: number) => {
+      filterIN += '{\"$eq\":' + id + '}';
+      if (index !== lastIndex) {
+        filterIN += ',';
+      }
+    });
+
+    const endpoint = '/kode/?q=';
+    const filterPart =  '{"sprache":{"$eq":"DE"},"kodeliste":{"$or":[' + filterIN + ']}}';
+    const queryUrl: string = this.BASE_URL
+      + endpoint
+      + encodeURIComponent(filterPart)
+      + '&limit=' + 10000;
+    console.log(queryUrl);
+    return this.http.get<any>(queryUrl).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Deprecated
+   */
+  getCodeListViaCodeListId(codeListId: number): Observable<any> {
+    return this.http.get<Items>(this.BASE_URL + '/kode/?' + 'kodeliste=' + codeListId + '&sprache=DE&limit=100')
+      .pipe(catchError(this.handleError));
+  }
+  /**
+   * Deprecated
+   */
+  getCodeViaCodeListId(codeListId: string): Observable<any> {
     return this.http.get<Items>(this.BASE_URL + '/kode/?' + 'kodeliste=' + codeListId + '&sprache=DE&limit=100')
       .pipe(catchError(this.handleError));
   }
 
   getProductViaPage(pageNumber: number, pageSize: number): Observable<any> {
-    // const date =  startDate.value.format('YYYY-MM-DD[T]HH:mm:ss[Z]');
-    // const query = '{"ZUL_ERSTMALIG_AM":{"$gt":{"$date": ' + '\"' + date + '\" }}}';
+
     const offset = pageNumber * pageSize;
-    return this.http.get<Items>(this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize)
-      .pipe(catchError(this.handleError));
+    return this.http.get<Items>(
+      this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize
+    ).pipe(catchError(this.handleError));
   }
 
-  getProductArray(pageNumber, pageSize): Observable<any> {
+  getProductArray(pageNumber: number, pageSize: number): Observable<any> {
     const offset = pageNumber * pageSize;
-    return this.http.get<Items>(this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize);
-
+    return this.http.get<Items>(
+      this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize
+    ).pipe(catchError(this.handleError));
   }
-  getProduct(startDate): Observable<Items> {
+  getProductArrayViaAuthorizationStart(startDate): Observable<Items> {
     const date =  startDate.value.format('YYYY-MM-DD[T]HH:mm:ss[Z]');
     const query = '{"ZUL_ERSTMALIG_AM":{"$gt":{"$date": ' + '\"' + date + '\" }}}';
-    return this.http.get<Items>(this.BASE_URL + '/mittel/?q=' + encodeURIComponent(query) + '&limit=' + this.DEFAULT_PAGE_SIZE)
-      .pipe(catchError(this.handleError));
+    return this.http.get<Items>(this.BASE_URL
+      + '/mittel/?q='
+      + encodeURIComponent(query)
+      + '&limit='
+      + this.DEFAULT_PAGE_SIZE
+    ).pipe(catchError(this.handleError));
   }
 
   getMittelByKennrList(kennrList): Observable<Items> {
@@ -55,8 +90,12 @@ export class PsmApiServiceClient {
     temp = temp.substring(0, temp.length - 1);
     const query = '{"KENNR":{"$or":[ '  + temp +  ']}}}';
 
-    return this.http.get<Items>(this.BASE_URL + '/mittel/?q=' + encodeURIComponent(query) + '&limit=' + this.DEFAULT_PAGE_SIZE)
-      .pipe(catchError(this.handleError));
+    return this.http.get<Items>(this.BASE_URL
+      + '/mittel/?q='
+      + encodeURIComponent(query)
+      + '&limit='
+      + this.DEFAULT_PAGE_SIZE
+    ).pipe(catchError(this.handleError));
   }
 
   getTopTenAuflagen(): Observable<Items> {
@@ -68,20 +107,19 @@ export class PsmApiServiceClient {
 
   getTopTenHinweise(): Observable<Items> {
     const topTenQuery = '{"$orderby":"KENNR"}';
-    return this.http.get<Items>(
-      this.BASE_URL + '/ghs_gefahrenhinweise/?q=' + encodeURIComponent(topTenQuery) + '&limit=' + this.DEFAULT_PAGE_SIZE)
-      .pipe(catchError(this.handleError)
-    );
+    return this.http.get<Items>(this.BASE_URL
+      + '/ghs_gefahrenhinweise/?q='
+      + encodeURIComponent(topTenQuery)
+      + '&limit='
+      + this.DEFAULT_PAGE_SIZE
+    ).pipe(catchError(this.handleError));
   }
 
   getUseArray(pageIndex: number, pageSize: number): Observable<any> {
     const offset = pageIndex * pageSize;
-    return this.http.get<Items>(this.BASE_URL + '/awg/?' + 'offset=' + offset + '&limit=' + pageSize);
-  }
-  getUseListViaPage(pageNumber: number, pageSize: number): Observable<any> {
-    const offset = pageNumber * pageSize;
-    return this.http.get<Items>(this.BASE_URL + '/awg/?' + 'offset=' + offset + '&limit=' + pageSize)
-      .pipe(catchError(this.handleError));
+    return this.http.get<Items>(
+      this.BASE_URL + '/awg/?' + 'offset=' + offset + '&limit=' + pageSize
+    ).pipe(catchError(this.handleError));
   }
 
   // Error handling
@@ -99,6 +137,5 @@ export class PsmApiServiceClient {
     window.alert(errorMessage);
     return throwError(errorMessage);
   }
-
 
 }

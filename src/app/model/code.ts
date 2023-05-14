@@ -1,3 +1,10 @@
+export interface ICode{
+  code: string;
+  codeListId: number;
+  languageCode: string;
+  codeValueText: string;
+  disabled: string;
+}
 export class Code {
   code: string;
   codeListId: number;

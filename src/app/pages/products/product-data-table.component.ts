@@ -4,8 +4,6 @@ import { PsmApiServiceClient } from '../../service/psm.api.service';
 import { ConverterService } from '../../service/converter.service';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
-import { Code } from '../../model/code';
 
 @Component({
   selector: 'app-products',
@@ -13,7 +11,6 @@ import { Code } from '../../model/code';
   styleUrls: ['./product-data-table.component.css']
 })
 export class ProductDataTableComponent implements OnInit {
-  codeList: Array<Code>;
   products: Observable<Product[]>;
   pageIndex = 0;
   pageSize = 5;
@@ -23,14 +20,8 @@ export class ProductDataTableComponent implements OnInit {
   isLoading = false;
   constructor(
     private converter: ConverterService,
-    private psmApiClient: PsmApiServiceClient,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.activatedRoute.data.subscribe(
-      ({ response }) => {
-        this.codeList = this.converter.convertToCodeArray(response.items);
-      });
-  }
+    private psmApiClient: PsmApiServiceClient
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -44,7 +35,7 @@ export class ProductDataTableComponent implements OnInit {
           this.hasNext = null != response.links.find(x => x.rel === 'next');
           this.hasPrev = null != response.links.find(x => x.rel === 'prev');
         }
-        return this.converter.convertToProductArray(response.items, this.codeList);
+        return this.converter.convertToProductArray(response.items);
       }),
       tap(res => {
         console.log(res);
