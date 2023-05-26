@@ -29,7 +29,6 @@ import { UsesDataTableComponent } from './pages/uses/uses-data-table.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { TableComponent } from './components/table/table.component';
 import { ConverterService } from './service/converter.service';
-import { CardComponent } from './components/card/card.component';
 import { InitContextService } from './service/init.context.service';
 
 const MY_FORMATS = {
@@ -59,7 +58,6 @@ function initializeAppFactory(appContext: InitContextService): () => Promise<any
     ProductDataTableComponent,
     UsesDataTableComponent,
     TableComponent,
-    CardComponent,
   ],
   imports: [
     AppRoutingModule,
