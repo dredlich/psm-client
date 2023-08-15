@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PsmApiServiceClient } from './psm.api.service';
 import { map } from 'rxjs/operators';
-import { Items } from '../model';
-import { Dictionary } from '../model/Dictionary';
-import { ICode } from '../model/code';
+import { Items } from '../../model';
+import { Dictionary } from '../../model/Dictionary';
+import { ICode } from '../../model/code';
 
 class CodeDictionary extends Dictionary {
   constructor() {

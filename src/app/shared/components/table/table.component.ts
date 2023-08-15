@@ -1,31 +1,53 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { tableSymbol } from '../../model/table/column';
-import { TableModel } from '../../model/table/table.model';
-import { ColumnModel } from '../../model/table/column.model';
+import {Component, Input, OnInit, Output} from '@angular/core';
+import { ColumnModel } from '../../../model/table/column.model';
 import { Sort, SortDirection } from '@angular/material/sort';
 import { sortBy, orderBy } from 'lodash';
+import { EventEmitter } from '@angular/core';
+import { TableParamModel } from '../../../model/table/table.param.model';
+
 @Component({
   selector: 'psm-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
+
+  @Input() selectedEndpoint: string;
   private loadedData: any[] = [];
 
   private tableData = [];
-  private tableModel: TableModel;
-
   collator: Intl.Collator = new Intl.Collator(undefined,
     { numeric: true, sensitivity: 'base' }
   );
 
+
+  @Input() keyMapEndpoint: any;
+  @Output('changeSelectedTable') fireSelectedTableChange: EventEmitter<TableParamModel> = new EventEmitter();
+
   @Input() set data(itemArray: any[]) {
     if (itemArray && itemArray.length > 0) {
+      let i = 0;
+      this.columns = [];
+
+      for (const columnName of Object.keys(itemArray[0])) {
+        if ('m_row$$' === columnName){
+          continue;
+        }
+        const hasData = itemArray.filter(item => null != item[columnName]).length > 0;
+        if (hasData){
+          this.columns.push({
+            columnName,
+            orderInfo: i++,
+            valueType: typeof itemArray[0][columnName],
+            isSortable: true
+          });
+        }
+      }
+
       this.tableData = [];
       for (const item of itemArray) {
         this.tableData.push(item);
       }
-      this.tableModel = this.data[0][tableSymbol];
       this.buildColumns();
       if (!this.loadedData.length) {
         // Keep original order of data
@@ -44,6 +66,10 @@ export class TableComponent implements OnInit {
 
   constructor() {}
 
+  changeSelectedTable(tableName: string, parameterName: string, parameterValue: string): void{
+    this.fireSelectedTableChange.emit({ tableName, parameterName, parameterValue } );
+  }
+
   ngOnInit(): void {}
 
   sortData(sort: Sort): void {
@@ -56,7 +82,7 @@ export class TableComponent implements OnInit {
   }
 
   private buildColumns(): void {
-    this.columns = this.tableModel.columns;
+    // this.columns = this.tableModel.columns;
     this.sortColumns();
     this.displayedColumns = this.columns.map(col => col.columnName);
   }

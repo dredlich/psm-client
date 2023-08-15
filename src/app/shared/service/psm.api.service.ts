@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Items } from '../model';
+import { Items } from '../../model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +40,13 @@ export class PsmApiServiceClient {
     return this.http.get<any>(queryUrl).pipe(catchError(this.handleError));
   }
 
+  getData(path: string, pageNumber: number, pageSize: number): Observable<any> {
+    const offset = pageNumber * pageSize;
+    const callUrl = this.BASE_URL + path + 'offset=' + offset + '&limit=' + pageSize;
+    console.log(callUrl);
+    return this.http.get<Items>(callUrl);
+  }
+
   /**
    * Deprecated
    */
@@ -56,7 +63,6 @@ export class PsmApiServiceClient {
   }
 
   getProductViaPage(pageNumber: number, pageSize: number): Observable<any> {
-
     const offset = pageNumber * pageSize;
     return this.http.get<Items>(
       this.BASE_URL + '/mittel/?' + 'offset=' + offset + '&limit=' + pageSize

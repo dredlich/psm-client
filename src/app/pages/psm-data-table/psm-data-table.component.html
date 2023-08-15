@@ -1,0 +1,53 @@
+<mat-card>
+  <mat-card-header class="wrapper">
+    <div class="fields-wrapper">
+      <mat-form-field class="select-endpoint-ctrl">
+        <mat-label>Select Table</mat-label>
+        <mat-select name="fieldName" ngDefaultControl [(ngModel)]="selectedEndpoint">
+          <mat-option *ngFor="let endpoint of endpoints" [value]="endpoint" (onSelectionChange)="selectionChanged($event)" >
+            {{endpoint}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-header>
+  <div class="page">
+    <mat-card class="table-container">
+      <mat-card-header>
+      </mat-card-header>
+      <div class="loading-indicator" *ngIf="isLoading">
+        <mat-spinner class="spinner"></mat-spinner>
+      </div>
+      <psm-table [data]="data"
+                 [selectedEndpoint]="selectedEndpoint"
+                 [keyMapEndpoint]="keyMapEndpoint"
+                 (changeSelectedTable)="changeSelectedTable($event)">
+      </psm-table>
+      <mat-card-footer *ngIf="!isLoading">
+      </mat-card-footer>
+    </mat-card>
+
+    <div class="page-control-container">
+      <div style="margin:auto;">
+        <button class="paging-btn" [disabled]="!hasPrev" mat-button mat-stroked-button (click)="prevPage()">prev</button>
+        <button class="paging-btn" [disabled]="!hasNext" mat-button mat-stroked-button (click)="nextPage()">next</button>
+      </div>
+      <div>
+        <mat-form-field appearance="fill" class="page-ctrl">
+          <mat-label>Page Size</mat-label>
+          <mat-select [(ngModel)]="pageSizeSelectCtrlValue"
+                      [(value)]="pageSizeSelectCtrlValue"
+                      (selectionChange)="changePageSize()">
+            <mat-option value="5">5</mat-option>
+            <mat-option value="10">10</mat-option>
+            <mat-option value="20">20</mat-option>
+            <mat-option value="50">50</mat-option>
+            <mat-option value="100">100</mat-option>
+            <mat-option value="200">200</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+</mat-card>

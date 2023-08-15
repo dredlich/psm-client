@@ -1,0 +1,79 @@
+.page
+{
+  width: 96vw;
+  margin: 0 auto;
+}
+.paging-btn
+{
+  margin: 0 4px 0 4px;
+}
+.psm-table
+{
+  width: 96vw;
+  max-width: 1360px;
+}
+.column-header
+{
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #666;
+}
+.loading-indicator
+{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 99;
+  background: rgba(0,0,0,0.3);
+}
+.loading-indicator mat-spinner
+{
+  position: relative;
+  top: calc(50% - 100px);
+  margin: 0 auto;
+}
+.table-container
+{
+  min-width: 76%;
+  max-width: 96%;
+  min-height: 56vh;
+  overflow-x: auto;
+  margin: 0 auto;
+}
+.page-control-container
+{
+  width: 96vw;
+  display:flex;
+  align-items: baseline;
+}
+.page-ctrl
+{
+  width: 6.8rem;
+  margin: 2rem 2rem 0 0;
+}
+th
+{
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.select-endpoint-ctrl
+{
+  right: 16px;
+  padding: 16px 16px 0 16px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.fields-wrapper {
+  display: inline-flex;
+  flex-wrap: wrap;
+}

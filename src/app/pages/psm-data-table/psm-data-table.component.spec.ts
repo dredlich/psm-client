@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProductDataTableComponent } from './product-data-table.component';
+import { PsmDataTableComponent } from './psm-data-table.component';
 
 describe('PsmDataTableComponent', () => {
-  let component: ProductDataTableComponent;
-  let fixture: ComponentFixture<ProductDataTableComponent>;
+  let component: PsmDataTableComponent;
+  let fixture: ComponentFixture<PsmDataTableComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProductDataTableComponent]
+      declarations: [PsmDataTableComponent]
     });
-    fixture = TestBed.createComponent(ProductDataTableComponent);
+    fixture = TestBed.createComponent(PsmDataTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

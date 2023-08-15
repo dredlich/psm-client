@@ -3,7 +3,6 @@ export class ColumnModel {
   orderInfo: number;
   valueType: any;
   isSortable: boolean;
-
   constructor(options: Partial<ColumnModel> = {}) {
     this.columnName = options.columnName;
     this.orderInfo = options.orderInfo || 0;
