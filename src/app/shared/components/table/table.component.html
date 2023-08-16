@@ -14,20 +14,18 @@
       <mat-menu #menu="matMenu" >
         <span *ngFor="let tableMapEndpoint of keyMapEndpoint[column.columnName]">
             <button mat-menu-item *ngIf="tableMapEndpoint.tableName != selectedEndpoint"
-                    (click)="changeSelectedTable(tableMapEndpoint.tableName, tableMapEndpoint.parameterName, element[column.columnName])">
+                    (click)="changeSelectedTable(tableMapEndpoint, element[column.columnName])">
             {{tableMapEndpoint.tableName}}
           </button>
         </span>
       </mat-menu>
 
       <span *ngIf="keyMapEndpoint.hasOwnProperty(column.columnName)">
-        <a class="cell-menu-label" *ngIf="keyMapEndpoint.hasOwnProperty(column.columnName)" [matMenuTriggerFor]="menu"><span class="cell-menu-label">{{element[column.columnName]}}</span></a>
-<!--        <button *ngIf="keyMapEndpoint.hasOwnProperty(column.columnName)"-->
-<!--                mat-icon-button-->
-<!--                [matMenuTriggerFor]="menu"-->
-<!--                aria-label="Example icon-button with a menu">-->
-<!--          <mat-icon>more_vert</mat-icon>-->
-<!--        </button>-->
+        <a *ngIf="keyMapEndpoint.hasOwnProperty(column.columnName)"
+           [matMenuTriggerFor]="menu"
+           class="cell-menu-label">
+          <span class="cell-menu-label">{{element[column.columnName]}}</span>
+        </a>
       </span>
       <div *ngIf="!keyMapEndpoint.hasOwnProperty(column.columnName)">
         {{element[column.columnName]}}

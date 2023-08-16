@@ -59,8 +59,8 @@ export class PsmDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
     'zusatzstoff_vertrieb',
   ];
   keyMapEndpoint = {
-    kennr: [{
-      tableName: 'antrag',
+    kennr: [
+    { tableName: 'antrag',
       parameterName: 'kennr'
     }, {
       tableName: 'auflagen',
@@ -112,6 +112,7 @@ export class PsmDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
       parameterName: 'kennr'
     }
     ],
+    auflage: [ { refType: 'KODE', tableName: 'kode', parameterName: 'kode' }],
     auflagenr: [
       { tableName: 'auflagen', parameterName: 'auflagenr'},
       { tableName: 'auflage_redu', parameterName: 'auflagenr'}
@@ -120,7 +121,8 @@ export class PsmDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
       { tableName: 'auflagen' , parameterName: 'ebene' },
       { tableName: 'awg' , parameterName: 'awg_id' },
       { tableName: 'hinweis' , parameterName: 'ebene' },
-    ]
+    ],
+    hinweis : [ { refType: 'KODE', tableName: 'kode', parameterName: 'kode' } ]
   };
   selectedEndpoint = this.endpoints[0];
   previousSelectedEndpoint: string;
@@ -134,9 +136,14 @@ export class PsmDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private psmApiClient: PsmApiServiceClient, public dialog: MatDialog) {}
 
   changeSelectedTable(param: TableParamModel): void {
-    this.previousSelectedEndpoint = this.selectedEndpoint;
-    this.selectedEndpoint = param.tableName;
-    this.loadData(this.selectedEndpoint, param.parameterName, param.parameterValue);
+    this.pageIndex = 0;
+    if (param.refType === 'LINK') {
+      this.previousSelectedEndpoint = this.selectedEndpoint;
+      this.selectedEndpoint = param.tableName;
+      this.loadData(this.selectedEndpoint, param.parameterName, param.parameterValue, param.refType);
+    } else {
+      this.loadData(param.tableName, param.parameterName, param.parameterValue, param.refType);
+    }
   }
 
   ngOnInit(): void { }
@@ -146,7 +153,7 @@ export class PsmDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('Values on ngAfterViewInit():');
     console.log('tableComponent:', this.tableComponent);
   }
-  loadData(path: string, paramName?: string, paramValue?: string): void {
+  loadData(path: string, paramName?: string, paramValue?: string, refType?: string): void {
     this.isLoading = true;
 
     const pn = null == paramName ? '' : paramName;
@@ -163,7 +170,12 @@ export class PsmDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedEndpoint = this.previousSelectedEndpoint;
         this.openDialog('Info', 'No Data Found');
       } else {
-        this.data = response.items;
+        if (null != refType && 'KODE' === refType) {
+          const kode = response.items.find(item => 'DE' === item.sprache);
+          this.openDialog(kode.kode, kode.kodetext);
+        } else {
+          this.data = response.items;
+        }
       }
     });
   }
@@ -180,11 +192,10 @@ export class PsmDataTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectionChanged($event: MatOptionSelectionChange<string>): void {
     if ($event.isUserInput || null == this.previousSelectedEndpoint) {
-      // if (null == this.previousSelectedEndpoint || this.previousSelectedEndpoint !== $event.source.value) {
+        this.pageIndex = 0;
         this.loadData($event.source.value);
         this.previousSelectedEndpoint = this.selectedEndpoint;
         this.selectedEndpoint = $event.source.value;
-      // }
     }
   }
 

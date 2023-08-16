@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { ColumnModel } from '../../../model/table/column.model';
 import { Sort, SortDirection } from '@angular/material/sort';
 import { sortBy, orderBy } from 'lodash';
@@ -66,8 +66,8 @@ export class TableComponent implements OnInit {
 
   constructor() {}
 
-  changeSelectedTable(tableName: string, parameterName: string, parameterValue: string): void{
-    this.fireSelectedTableChange.emit({ tableName, parameterName, parameterValue } );
+  changeSelectedTable(tempModel: any, parameterValue: string): void {
+    this.fireSelectedTableChange.emit(new TableParamModel(tempModel.tableName, tempModel.parameterName, parameterValue, tempModel.refType));
   }
 
   ngOnInit(): void {}
@@ -82,7 +82,6 @@ export class TableComponent implements OnInit {
   }
 
   private buildColumns(): void {
-    // this.columns = this.tableModel.columns;
     this.sortColumns();
     this.displayedColumns = this.columns.map(col => col.columnName);
   }

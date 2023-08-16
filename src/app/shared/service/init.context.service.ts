@@ -23,6 +23,7 @@ export class InitContextService
   public AREA_OF_USE_CODELIST_ID = 4;
   public FIELD_OF_USE_CODELIST_ID = 21;
   public FORMULATION_TYPE_CODELIST_ID = 22;
+  public LABELING_TEXTS_AND_CONDITIONS = 74;
 
   public codeDict: Dictionary;
   constructor(private psmApi: PsmApiServiceClient) {}
@@ -35,6 +36,7 @@ export class InitContextService
       this.AREA_OF_USE_CODELIST_ID,
       this.FIELD_OF_USE_CODELIST_ID,
       this.FORMULATION_TYPE_CODELIST_ID,
+      this.LABELING_TEXTS_AND_CONDITIONS
     ]).pipe(
       map((result: Items) => {
         const list: any[] = result.items;
